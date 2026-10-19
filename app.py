@@ -37,7 +37,7 @@ else:
                 try:
                     # Llamada a la API de Gemini
                     response = client.models.generate_content(
-                        model="gemini-2.5-flash",
+                        model="gemini-1.5-flash",
                         contents=f"{SYSTEM_INSTRUCTION}\n\nConsulta del usuario: {consulta}"
                     )
                     st.markdown("### 🗺️ Sugerencia de recorrido:")
