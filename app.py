@@ -1,5 +1,5 @@
 import streamlit as st
-from google import genai
+import google.generativeai as genai
 
 # Configuración de la página
 st.set_page_config(page_title="Asistente STM Montevideo", page_icon="🚌")
@@ -13,8 +13,11 @@ api_key = st.secrets.get("GEMINI_API_KEY")
 if not api_key:
     st.error("⚠️ Falta configurar la GEMINI_API_KEY en los Secrets de Streamlit.")
 else:
-    # Inicializar el cliente de Gemini
-    client = genai.Client(api_key=api_key)
+    # Configurar la API con la librería clásica
+    genai.configure(api_key=api_key)
+
+    # Usar el modelo estándar y estable
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
     # Instrucción del sistema (El rol y personalidad de la IA)
     SYSTEM_INSTRUCTION = """
@@ -35,11 +38,12 @@ else:
         if consulta.strip():
             with st.spinner("Consultando opciones de ómnibus y combinaciones... 🚌"):
                 try:
-                    # Llamada a la API de Gemini con el modelo súper estable
-                    response = client.models.generate_content(
-                        model="gemini-1.5-flash",
-                        contents=f"{SYSTEM_INSTRUCTION}\n\nConsulta del usuario: {consulta}"
-                    )
+                    # Prompt completo combinando las reglas y la consulta
+                    prompt_completo = f"{SYSTEM_INSTRUCTION}\n\nConsulta del usuario: {consulta}"
+                    
+                    # Generar la respuesta
+                    response = model.generate_content(prompt_completo)
+                    
                     st.markdown("### 🗺️ Sugerencia de recorrido:")
                     st.write(response.text)
                 except Exception as e:
