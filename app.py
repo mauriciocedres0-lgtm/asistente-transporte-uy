@@ -35,9 +35,9 @@ else:
         if consulta.strip():
             with st.spinner("Consultando opciones de ómnibus y combinaciones... 🚌"):
                 try:
-                    # Llamada a la API de Gemini con modelo válido
+                    # Llamada a la API de Gemini con el modelo actualizado
                     response = client.models.generate_content(
-                        model="gemini-1.5-flash",
+                        model="gemini-2.0-flash",
                         contents=f"{SYSTEM_INSTRUCTION}\n\nConsulta del usuario: {consulta}"
                     )
                     st.markdown("### 🗺️ Sugerencia de recorrido:")
